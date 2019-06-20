@@ -1,0 +1,9 @@
+version: '3'
+services:
+  squadxml:
+    restart: always
+    image: kugel/squadxml
+    ports:
+      - "8080:80"
+    volumes:
+      - /path/to/squadxml/dir:/squadxml:ro
