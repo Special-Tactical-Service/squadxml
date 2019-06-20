@@ -1,37 +1,27 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+	"net/http"
 	"os"
+	"path/filepath"
 )
 
-var (
-	db *sqlx.DB
+const (
+	squadxmlFile            = "squad.xml"
+	defaultHttpWriteTimeout = 20
+	defaultHttpReadTimeout  = 20
 )
-
-func connectToDB() {
-	user := os.Getenv("SQUADXML_DB_USER")
-	password := os.Getenv("SQUADXML_DB_PASSWORD")
-	host := os.Getenv("SQUADXML_DB_HOST")
-	database := os.Getenv("SQUADXML_DB")
-	var err error
-	db, err = sqlx.Connect("mysql", mysqlConnection(user, password, host, database))
-
-	if err != nil {
-		logrus.WithError(err).Fatal("Error connecting to database")
-	}
-
-	if err := db.Ping(); err != nil {
-		logrus.WithError(err).Fatal("Error pinging database")
-	}
-}
-
-func mysqlConnection(user, password, host, database string) string {
-	return user + ":" + password + "@" + host + "/" + database
-}
 
 func main() {
-	connectToDB()
+	path := os.Getenv("SQUADXML_PATH")
+	logrus.WithField("squadxml_path", path).Info("Starting server...")
+
+	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(path, squadxmlFile))
+	}))
+
+	if err := http.ListenAndServe(os.Getenv("SQUADXML_HOST"), nil); err != nil {
+		logrus.WithError(err).Fatal("Error starting server")
+	}
 }
