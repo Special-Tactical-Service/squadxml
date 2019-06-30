@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -27,10 +28,10 @@ const (
 )
 
 type Member struct {
-	UserOption32 string `db:"userOption32"`
-	Username     string `db:"username"`
-	RankTitle    string `db:"rankTitle"`
-	UserOption33 string `db:"userOption33"`
+	UserOption32 string         `db:"userOption32"`
+	Username     string         `db:"username"`
+	RankTitle    string         `db:"rankTitle"`
+	UserOption33 sql.NullString `db:"userOption33"`
 }
 
 var (
@@ -92,11 +93,17 @@ func writeSquadXMLToFile(member []Member) {
 	xml := squadxmlHead + squadxmlSquad
 
 	for _, m := range member {
+		motto := ""
+
+		if m.UserOption33.Valid {
+			motto = " - " + m.UserOption33.String
+		}
+
 		xml += `<member id="` + m.UserOption32 + `" nick="` + m.Username + `">
 			<name>` + m.Username + `</name>
 			<email></email>
 			<icq>N/A</icq>
-			<remark>` + m.RankTitle + ` - ` + m.UserOption33 + `</remark>
+			<remark>` + m.RankTitle + motto + `</remark>
 			</member>`
 	}
 
