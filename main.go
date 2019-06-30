@@ -96,6 +96,7 @@ func getMember() []Member {
 		return nil
 	}
 
+	logrus.WithField("count", len(member)).Info("Selected members")
 	return member
 }
 
@@ -121,7 +122,10 @@ func writeSquadXMLToFile(member []Member) {
 
 	if err := ioutil.WriteFile(filepath.Join(os.Getenv("SQUADXML_PATH"), squadxmlFile), []byte(xml), 0777); err != nil {
 		logrus.WithError(err).Error("Error writing squadxml to file")
+		return
 	}
+
+	logrus.WithField("xml", xml).Info("Successfully build squad.xml")
 }
 
 func main() {
