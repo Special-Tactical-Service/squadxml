@@ -9,6 +9,11 @@ RUN go build -ldflags "-s -w" main.go
 FROM alpine
 COPY --from=build /go/src/github.com/Kugelschieber/squadxml /app
 WORKDIR /app
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache && \
+    apk add ca-certificates && \
+    rm -rf /var/cache/apk/*
 RUN mkdir /squadxml
 
 # default config
@@ -20,4 +25,4 @@ ENV SQUADXML_DB_HOST=host
 ENV SQUADXML_DB=db
 
 VOLUME ["/squadxml"]
-CMD ["/app/main"]
+ENTRYPOINT ["/app/main"]
