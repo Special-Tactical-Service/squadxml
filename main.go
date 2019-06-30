@@ -47,11 +47,12 @@ func connectToDB() {
 	db, err = sqlx.Connect("mysql", mysqlConnection(user, password, host, database))
 
 	if err != nil {
-		logrus.WithError(err).Fatal("Error connecting to database")
+		logrus.WithError(err).Error("Error connecting to database")
+		return
 	}
 
 	if err := db.Ping(); err != nil {
-		logrus.WithError(err).Fatal("Error pinging database")
+		logrus.WithError(err).Error("Error pinging database")
 	}
 }
 
@@ -59,14 +60,23 @@ func mysqlConnection(user, password, host, database string) string {
 	return user + ":" + password + "@" + host + "/" + database
 }
 
+func disconnectDB() {
+	if err := db.Close(); err != nil {
+		logrus.WithError(err).Error("Error closing database connection")
+	}
+}
+
 func buildSquadXML() {
 	for {
+		logrus.Info("Rebuilding squad.xml...")
+		connectToDB()
 		member := getMember()
 
 		if member != nil {
 			writeSquadXMLToFile(member)
 		}
 
+		disconnectDB()
 		time.Sleep(time.Minute * 10)
 	}
 }
@@ -115,7 +125,6 @@ func writeSquadXMLToFile(member []Member) {
 }
 
 func main() {
-	connectToDB()
 	go buildSquadXML()
 	path := os.Getenv("SQUADXML_PATH")
 	logrus.WithField("squadxml_path", path).Info("Starting server...")
