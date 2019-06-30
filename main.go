@@ -79,7 +79,7 @@ func getMember() []Member {
         ORDER BY wcf1_user.userID ASC`
 	var member []Member
 
-	if err := db.Select(member, query); err != nil {
+	if err := db.Select(&member, query); err != nil {
 		logrus.WithError(err).Error("Error selecting members")
 		return nil
 	}
