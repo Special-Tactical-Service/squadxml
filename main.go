@@ -4,6 +4,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -100,6 +101,10 @@ func writeSquadXMLToFile(member []Member) {
 	}
 
 	xml += squadxmlEnd
+
+	if err := ioutil.WriteFile(filepath.Join(os.Getenv("SQUADXML_PATH"), squadxmlFile), []byte(xml), 0777); err != nil {
+		logrus.WithError(err).Error("Error writing squadxml to file")
+	}
 }
 
 func main() {
