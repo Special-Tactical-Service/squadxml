@@ -2,8 +2,8 @@ version: '3'
 services:
   squadxml:
     restart: always
-    image: kugel/squadxml
+    image: squadxml
     ports:
       - "8080:80"
-    volumes:
-      - /path/to/squadxml/dir:/squadxml:ro
+#    volumes:
+#      - "/home/marvin/go/src/github.com/Kugelschieber/squadxml/squadxml:/squadxml:ro"
