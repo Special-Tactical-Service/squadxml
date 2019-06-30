@@ -16,14 +16,14 @@ const (
 	squadxmlFile = "squad.xml"
 	squadxmlLogo = "logo.paa"
 	squadxmlHead = `<?xml version="1.0"?>
-		<!DOCTYPE squad SYSTEM "squad.dtd">
-		<?xml-stylesheet href="squad.xsl" type="text/xsl"?>`
+<!DOCTYPE squad SYSTEM "squad.dtd">
+<?xml-stylesheet href="squad.xsl" type="text/xsl"?>`
 	squadxmlSquad = `<squad nick="sTs">
-		<name>Special Tactical Service</name>
-		<email>noreply@sts.wtf</email>
-		<web>www.sts.wtf</web>
-		<picture>` + squadxmlLogo + `</picture>
-		<title>Special Tactical Service</title>`
+<name>Special Tactical Service</name>
+<email>noreply@sts.wtf</email>
+<web>www.sts.wtf</web>
+<picture>` + squadxmlLogo + `</picture>
+<title>Special Tactical Service</title>`
 	squadxmlEnd = `</squad>`
 )
 
@@ -111,11 +111,11 @@ func writeSquadXMLToFile(member []Member) {
 		}
 
 		xml += `<member id="` + m.UserOption32 + `" nick="` + m.Username + `">
-			<name>` + m.Username + `</name>
-			<email></email>
-			<icq>N/A</icq>
-			<remark>` + m.RankTitle + motto + `</remark>
-			</member>`
+<name>` + m.Username + `</name>
+<email></email>
+<icq>N/A</icq>
+<remark>` + m.RankTitle + motto + `</remark>
+</member>`
 	}
 
 	xml += squadxmlEnd
