@@ -59,12 +59,13 @@ func mysqlConnection(user, password, host, database string) string {
 
 func buildSquadXML() {
 	for {
-		time.Sleep(time.Minute * 10)
 		member := getMember()
 
 		if member != nil {
 			writeSquadXMLToFile(member)
 		}
+
+		time.Sleep(time.Minute * 10)
 	}
 }
 
