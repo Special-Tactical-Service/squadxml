@@ -10,7 +10,6 @@ FROM alpine
 COPY --from=build /go/src/github.com/Kugelschieber/squadxml /app
 WORKDIR /app
 RUN mkdir /squadxml
-RUN chmod +x /app/main
 
 # default config
 ENV SQUADXML_PATH=/squadxml
