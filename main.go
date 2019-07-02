@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -106,8 +107,8 @@ func writeSquadXMLToFile(member []Member) {
 	for _, m := range member {
 		motto := ""
 
-		if m.UserOption33.Valid {
-			motto = " - " + m.UserOption33.String
+		if m.UserOption33.Valid && strings.TrimSpace(m.UserOption33.String) != "" {
+			motto = " - " + strings.TrimSpace(m.UserOption33.String)
 		}
 
 		xml += `<member id="` + m.UserOption32 + `" nick="` + m.Username + `">
